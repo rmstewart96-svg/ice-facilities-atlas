@@ -2,15 +2,21 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './App.css'
+import { DEFAULT_DATASET_ID, getDatasetById } from './config/datasets.js'
 
 function App() {
   const mapContainer = useRef(null)
   const mapRef = useRef(null)
   const popupRef = useRef(null)
   const dataRef = useRef(null)
+  const [activeDatasetId, setActiveDatasetId] = useState(DEFAULT_DATASET_ID)
+
+  const activeDataset = getDatasetById(activeDatasetId)
 
   const [data, setData] = useState(null)
+
   const [search, setSearch] = useState('')
+
   const [categoryFilter, setCategoryFilter] = useState('All')
     const [subcomponentFilter, setSubcomponentFilter] = useState('All')
 const [statusFilter, setStatusFilter] = useState('All')
@@ -21,7 +27,10 @@ const [statusFilter, setStatusFilter] = useState('All')
 
   useEffect(() => {
     async function loadData() {
-      const response = await fetch('/ice_facilities.geojson')
+
+      if (!activeDataset) return
+
+      const response = await fetch(activeDataset.dataUrl)
       const geojson = await response.json()
 
       dataRef.current = geojson
@@ -29,7 +38,8 @@ const [statusFilter, setStatusFilter] = useState('All')
     }
 
     loadData()
-  }, [])
+
+  }, [activeDatasetId])
 
   useEffect(() => {
     if (!data) return
