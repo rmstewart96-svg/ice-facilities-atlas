@@ -1,0 +1,676 @@
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  color: #172033;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  min-width: 380px;
+  height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #d9dee7;
+  z-index: 2;
+}
+
+.sidebar-header {
+  padding: 22px 22px 12px;
+}
+
+.sidebar-header h1 {
+  margin: 0 0 7px;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.sidebar-header p {
+  margin: 0;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.filter-group {
+  margin: 0 22px 13px;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.filter-row .filter-group:first-child {
+  margin-right: 6px;
+}
+
+.filter-row .filter-group:last-child {
+  margin-left: 6px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.filter-group input,
+.filter-group select {
+  width: 100%;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid #cfd5df;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #172033;
+  font-size: 13px;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+  outline: 2px solid #94a3b8;
+  outline-offset: 1px;
+}
+
+.results-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  padding: 12px 22px;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 13px;
+}
+
+.reset-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reset-link:hover {
+  text-decoration: underline;
+}
+
+.results-list {
+  flex: 1;
+  overflow-y: auto;
+  background: #f8fafc;
+}
+
+.result-card {
+  display: block;
+  width: 100%;
+  padding: 14px 22px;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.result-card:hover {
+  background: #f1f5f9;
+}
+
+.result-card:focus {
+  outline: 2px solid #64748b;
+  outline-offset: -2px;
+}
+
+.result-name {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.result-location {
+  margin-bottom: 5px;
+  color: #475569;
+  font-size: 12px;
+}
+
+.result-meta {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.results-limit,
+.no-results {
+  padding: 18px 22px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.map-panel {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+}
+
+.map-container {
+  width: 100%;
+  height: 100%;
+}
+
+.facility-popup {
+  min-width: 230px;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.facility-popup h3 {
+  margin: 0 0 9px;
+  color: #172033;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.facility-popup p {
+  margin: 5px 0;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.maplibregl-popup-content {
+  padding: 15px;
+  border-radius: 7px;
+}
+
+@media (max-width: 800px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    height: 38vh;
+    border-right: none;
+    border-bottom: 1px solid #d9dee7;
+  }
+
+  .map-panel {
+    height: 62vh;
+  }
+}
+
+.shared-location-popup {
+  min-width: 300px;
+}
+
+.shared-location-count {
+  margin-bottom: 10px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.shared-record-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border-top: 1px solid #e5e7eb;
+}
+
+.shared-record {
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.shared-record:last-child {
+  border-bottom: none;
+}
+
+.shared-record-name {
+  margin-bottom: 3px;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.shared-record-meta {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.shared-record-id {
+  margin-top: 3px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-family: monospace;
+}
+
+.detail-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 380px;
+  max-width: 90vw;
+  height: 100vh;
+  background: #ffffff;
+  border-left: 1px solid #d9dee7;
+  box-shadow: -8px 0 24px rgba(15, 23, 42, 0.12);
+  z-index: 5;
+  overflow-y: auto;
+}
+
+.detail-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.detail-close:hover {
+  background: #e2e8f0;
+}
+
+.detail-content {
+  padding: 24px;
+  padding-top: 56px;
+}
+
+.detail-kicker {
+  margin-bottom: 6px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-content h2 {
+  margin: 0 0 8px;
+  color: #172033;
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.detail-location,
+.detail-location-count {
+  margin-bottom: 20px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.detail-fields {
+  margin: 0;
+}
+
+.detail-fields > div {
+  padding: 11px 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.detail-fields dt {
+  margin-bottom: 3px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.detail-fields dd {
+  margin: 0;
+  color: #172033;
+  font-size: 13px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.location-record-list {
+  border-top: 1px solid #e5e7eb;
+}
+
+.location-record-card {
+  display: block;
+  width: 100%;
+  padding: 14px 0;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.location-record-card:hover {
+  background: #f8fafc;
+}
+
+.location-record-name {
+  margin-bottom: 4px;
+  color: #172033;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.location-record-meta {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.location-record-id {
+  margin-top: 4px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-family: monospace;
+}
+
+@media (max-width: 800px) {
+  .detail-panel {
+    width: 100%;
+    max-width: none;
+    height: 70vh;
+    top: auto;
+    bottom: 0;
+    border-left: none;
+    border-top: 1px solid #d9dee7;
+    border-radius: 14px 14px 0 0;
+    box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.12);
+  }
+}
+
+.map-panel {
+  position: relative;
+}
+
+.map-legend {
+  position: absolute;
+  left: 14px;
+  bottom: 28px;
+  width: 220px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #d9dee7;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  z-index: 3;
+}
+
+.legend-title {
+  margin-bottom: 9px;
+  color: #172033;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  color: #475569;
+  font-size: 11px;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  flex: 0 0 11px;
+  border-radius: 50%;
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.15);
+}
+
+.legend-287g {
+  background: #2563eb;
+}
+
+.legend-detention {
+  background: #dc2626;
+}
+
+.legend-processing {
+  background: #f59e0b;
+}
+
+.legend-air {
+  background: #7c3aed;
+}
+
+.legend-legal {
+  background: #0891b2;
+}
+
+.legend-investigations {
+  background: #059669;
+}
+
+.legend-admin {
+  background: #64748b;
+}
+
+
+/* Interactive map legend */
+
+button.legend-item {
+  width: 100%;
+  padding: 5px 6px;
+  margin: 1px -6px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+button.legend-item:hover {
+  background: #f1f5f9;
+}
+
+button.legend-item-active {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #172033;
+  font-weight: 700;
+}
+
+button.legend-item-active:hover {
+  background: #e2e8f0;
+}
+
+
+/* Advanced filters */
+
+.advanced-filters {
+  margin: 0 22px 14px;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.advanced-filters summary {
+  padding: 10px 0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+.advanced-filters summary:hover {
+  color: #172033;
+}
+
+.advanced-filter-content {
+  padding-bottom: 4px;
+}
+
+.advanced-filter-content .filter-group {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Structured facility detail panel */
+
+.detail-alternate-name {
+  margin-top: -3px;
+  margin-bottom: 7px;
+  color: #64748b;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.detail-status {
+  display: inline-block;
+  margin-bottom: 22px;
+  padding: 4px 9px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.detail-section {
+  margin-top: 22px;
+}
+
+.detail-section + .detail-section {
+  margin-top: 26px;
+}
+
+.detail-section h3 {
+  margin: 0 0 7px;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-section .detail-fields {
+  border-top: 1px solid #dbe1e8;
+}
+
+.detail-section .detail-fields > div {
+  padding: 10px 0;
+  border-top: none;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.detail-section .detail-fields > div:last-child {
+  border-bottom: none;
+}
+
+.detail-section .detail-fields dt {
+  margin-bottom: 4px;
+  color: #7c8798;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.detail-section .detail-fields dd {
+  color: #172033;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* Selected search result */
+
+.result-card-selected {
+  background: #f1f5f9;
+  box-shadow: inset 3px 0 0 #172033;
+}
+
+.result-card-selected:hover {
+  background: #f1f5f9;
+}
+
+/* Mobile map refinements */
+
+@media (max-width: 800px) {
+  .map-legend {
+    left: 8px;
+    bottom: 20px;
+    width: 180px;
+    padding: 8px 10px;
+  }
+
+  .legend-title {
+    margin-bottom: 5px;
+    font-size: 10px;
+  }
+
+  button.legend-item {
+    padding: 3px 4px;
+    font-size: 10px;
+  }
+
+  .legend-swatch {
+    width: 9px;
+    height: 9px;
+    flex-basis: 9px;
+  }
+
+  .detail-content {
+    padding: 20px;
+    padding-top: 52px;
+  }
+}
