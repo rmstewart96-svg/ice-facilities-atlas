@@ -14,6 +14,8 @@ function App() {
 
   const activeDataset = getDatasetById(activeDatasetId)
 
+  const recordIdField = activeDataset?.recordIdField || 'facility_id'
+
   const [data, setData] = useState(null)
 
   const [search, setSearch] = useState('')
@@ -55,7 +57,7 @@ const [statusFilter, setStatusFilter] = useState('All')
 
     const feature = data.features.find(
       (candidate) =>
-        candidate.properties?.facility_id === facilityId
+        candidate.properties?.[recordIdField] === facilityId
     )
 
     if (!feature) return
@@ -100,7 +102,7 @@ const [statusFilter, setStatusFilter] = useState('All')
 
       const feature = data.features.find(
         (candidate) =>
-          candidate.properties?.facility_id === facilityId
+          candidate.properties?.[recordIdField] === facilityId
       )
 
       if (!feature) return
@@ -201,23 +203,24 @@ const [statusFilter, setStatusFilter] = useState('All')
 
     if (!map || !map.getLayer('selected-point')) return
 
-    const facilityId =
-      selectedFacility?.properties?.facility_id || ''
+    const recordId =
+      selectedFacility?.properties?.[recordIdField] || ''
 
     map.setFilter(
       'selected-point',
-      ['==', ['get', 'facility_id'], facilityId]
+      ['==', ['get', recordIdField], recordId]
     )
-  }, [selectedFacility])
+
+  }, [selectedFacility, recordIdField])
 
   useEffect(() => {
-    const facilityId =
-      selectedFacility?.properties?.facility_id
+    const recordId =
+      selectedFacility?.properties?.[recordIdField]
 
-    if (!facilityId) return
+    if (!recordId) return
 
     const resultCard = document.getElementById(
-      `result-${facilityId}`
+      `result-${recordId}`
     )
 
     if (!resultCard) return
@@ -274,12 +277,12 @@ const [statusFilter, setStatusFilter] = useState('All')
   }
 
   function getRecordsAtLocation(feature) {
-    const facilityId = feature.properties?.facility_id
+    const recordId = feature.properties?.[recordIdField]
 
     const originalFeature =
       filteredFeaturesRef.current.find(
         (candidate) =>
-          candidate.properties?.facility_id === facilityId
+          candidate.properties?.[recordIdField] === recordId
       ) || feature
 
     const key = coordinateKey(originalFeature)
@@ -413,13 +416,13 @@ const [statusFilter, setStatusFilter] = useState('All')
     setSelectedLocationRecords([])
     setDetailView('facility')
 
-    const facilityId = feature.properties?.facility_id
+    const recordId = feature.properties?.[recordIdField]
 
-    if (facilityId) {
+    if (recordId) {
       window.history.pushState(
-        { facilityId },
+        { recordId },
         '',
-        `/facility/${facilityId}`
+        `/facility/${recordId}`
       )
     }
 
@@ -569,7 +572,7 @@ const [statusFilter, setStatusFilter] = useState('All')
         id: 'selected-point',
         type: 'circle',
         source: 'facilities-unclustered',
-        filter: ['==', ['get', 'facility_id'], ''],
+        filter: ['==', ['get', recordIdField], ''],
         paint: {
           'circle-radius': 10,
           'circle-color': 'rgba(0, 0, 0, 0)',
@@ -850,10 +853,10 @@ const [statusFilter, setStatusFilter] = useState('All')
 
             return (
               <button
-                key={p.facility_id}
-                id={`result-${p.facility_id}`}
+                key={p[recordIdField]}
+                id={`result-${p[recordIdField]}`}
                 className={`result-card ${
-                  selectedFacility?.properties?.facility_id === p.facility_id
+                  selectedFacility?.properties?.[recordIdField] === p[recordIdField]
                     ? 'result-card-selected'
                     : ''
                 }`}
