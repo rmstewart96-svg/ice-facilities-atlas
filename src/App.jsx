@@ -3,6 +3,7 @@ import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './App.css'
 import { DEFAULT_DATASET_ID, getDatasetById } from './config/datasets.js'
+import { ICE_FACILITY_CATEGORIES, getIceFacilityCategory } from './config/iceFacilities.js'
 
 function App() {
   const mapContainer = useRef(null)
@@ -159,7 +160,7 @@ const [statusFilter, setStatusFilter] = useState('All')
 
       const matchesCategory =
         categoryFilter === 'All' ||
-        getMapCategory(feature) === categoryFilter
+        getIceFacilityCategory(feature) === categoryFilter
       const matchesSubcomponent =
         subcomponentFilter === 'All' ||
         p.subcomponent === subcomponentFilter
@@ -227,15 +228,7 @@ const [statusFilter, setStatusFilter] = useState('All')
     })
   }, [selectedFacility])
 
-  const categoryOptions = [
-    '287(g)',
-    'Detention',
-    'Processing & Enforcement',
-    'Air Operations',
-    'Legal',
-    'Investigations & Oversight',
-    'Administration & Specialized'
-  ]
+  const categoryOptions = ICE_FACILITY_CATEGORIES
 
   const subcomponentOptions = useMemo(() => {
     if (!data || categoryFilter === 'All') return []
@@ -244,7 +237,7 @@ const [statusFilter, setStatusFilter] = useState('All')
       data.features
         .filter(
           (feature) =>
-            getMapCategory(feature) === categoryFilter
+            getIceFacilityCategory(feature) === categoryFilter
         )
         .map((feature) => feature.properties?.subcomponent)
         .filter(Boolean)
@@ -274,56 +267,6 @@ const [statusFilter, setStatusFilter] = useState('All')
         .filter(Boolean)
     )].sort()
   }, [data])
-
-  function getMapCategory(feature) {
-    const fn = feature.properties?.function || ''
-
-    if (fn === '287(g) Program') {
-      return '287(g)'
-    }
-
-    if (
-      fn === 'Detention' ||
-      fn === 'Detention Health Care'
-    ) {
-      return 'Detention'
-    }
-
-    if (
-      fn === 'Immigration Processing/Transfer' ||
-      fn === 'Immigration Enforcement/Removal Operations'
-    ) {
-      return 'Processing & Enforcement'
-    }
-
-    if (fn === 'Air Transportation') {
-      return 'Air Operations'
-    }
-
-    if (
-      fn === 'Legal Services' ||
-      fn === 'Legal Services/Agency General Counsel'
-    ) {
-      return 'Legal'
-    }
-
-    if (
-      fn === 'Internal Investigations' ||
-      fn === 'Cybercrime Investigative Support' ||
-      fn === 'Intellectual Property Enforcement Coordination' ||
-      fn === 'Financial Crime Investigative Support' ||
-      fn === 'Human Rights / War Crimes Investigations' ||
-      fn === 'Forensic Laboratory Services' ||
-      fn === 'Immigration Status / Law Enforcement Support' ||
-      fn === 'Enforcement Targeting / Lead Generation' ||
-      fn === 'Criminal Analysis / Targeting' ||
-      fn === 'Internal Oversight/Investigations/Inspections/Security'
-    ) {
-      return 'Investigations & Oversight'
-    }
-
-    return 'Administration & Specialized'
-  }
 
   function coordinateKey(feature) {
     const [lon, lat] = feature.geometry.coordinates
@@ -740,7 +683,7 @@ const [statusFilter, setStatusFilter] = useState('All')
           ...feature,
           properties: {
             ...feature.properties,
-            map_category: getMapCategory(feature)
+            map_category: getIceFacilityCategory(feature)
           }
         }))
       }
